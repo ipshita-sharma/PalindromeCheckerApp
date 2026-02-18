@@ -1,34 +1,45 @@
 import java.util.Scanner;
+import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
     // Entry point of the Java application
     public static void main(String[] args) {
 
-        // Create Scanner to read user input
+        // Create Scanner for user input
         Scanner scanner = new Scanner(System.in);
 
-        // Ask the user to enter a string
-        System.out.print("Enter a string: ");
-        String original = scanner.nextLine();
+        // Ask user to enter a string
+        System.out.print("Enter a string to check palindrome: ");
+        String input = scanner.nextLine();
 
-        // Variable to store reversed string
-        String reversed = "";
+        // Create a Stack to store characters
+        Stack<Character> stack = new Stack<>();
 
-        // Reverse the string using for loop
-        for (int i = original.length() - 1; i >= 0; i--) {
-            reversed = reversed + original.charAt(i);
+        // Push each character of the string into the stack
+        for (int i = 0; i < input.length(); i++) {
+            stack.push(input.charAt(i));
         }
 
-        // Compare original and reversed strings
-        if (original.equals(reversed)) {
-            System.out.println("The string \"" + original + "\" is a Palindrome.");
+        // Variable to track palindrome status
+        boolean isPalindrome = true;
+
+        // Pop characters and compare with original string
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) != stack.pop()) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        // Print result
+        if (isPalindrome) {
+            System.out.println("The string \"" + input + "\" is a Palindrome.");
         } else {
-            System.out.println("The string \"" + original + "\" is NOT a Palindrome.");
+            System.out.println("The string \"" + input + "\" is NOT a Palindrome.");
         }
 
         // Close scanner
         scanner.close();
     }
 }
-
