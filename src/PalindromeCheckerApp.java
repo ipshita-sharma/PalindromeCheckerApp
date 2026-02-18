@@ -3,18 +3,26 @@ public class PalindromeCheckerApp {
     // Entry point of the Java application
     public static void main(String[] args) {
 
-        // Display welcome message
-        System.out.println("======================================");
-        System.out.println("      Welcome to Palindrome Checker   ");
-        System.out.println("======================================");
+        // Hardcoded string
+        String word = "madam";
 
-        // Display application details
-        System.out.println("Application Name : Palindrome Checker App");
-        System.out.println("Version          : 1.0");
+        // Reverse the string
+        String reversed = "";
 
-        System.out.println("======================================");
-        System.out.println("Application started successfully.");
-        System.out.println("======================================");
+        for (int i = word.length() - 1; i >= 0; i--) {
+            reversed = reversed + word.charAt(i);
+        }
+
+        // Check if palindrome using conditional statement
+        if (word.equals(reversed)) {
+            System.out.println("The word \"" + word + "\" is a Palindrome.");
+        } else {
+            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
+        }
+
+        // Program exit message
+        System.out.println("Program exited successfully.");
     }
 }
+
 
