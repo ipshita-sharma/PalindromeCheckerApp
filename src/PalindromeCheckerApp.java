@@ -1,49 +1,54 @@
 import java.util.Scanner;
-import java.util.Deque;
-import java.util.LinkedList;
 
+// Service Class (Encapsulated Palindrome Logic)
+class PalindromeChecker {
+
+    // Public method exposed to client
+    public boolean checkPalindrome(String input) {
+
+        // Preprocessing (optional normalization)
+        String processed = input.replaceAll("\\s+", "").toLowerCase();
+
+        char[] charArray = processed.toCharArray();
+
+        int start = 0;
+        int end = charArray.length - 1;
+
+        while (start < end) {
+            if (charArray[start] != charArray[end]) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+
+        return true;
+    }
+}
+
+
+// Application Class (Client)
 public class PalindromeCheckerApp {
 
-    // Entry point of the Java application
     public static void main(String[] args) {
 
-        // Create Scanner for user input
         Scanner scanner = new Scanner(System.in);
 
-        // Ask user to enter a string
-        System.out.print("Enter a string to check palindrome: ");
+        System.out.println("=== UC11: Object-Oriented Palindrome Service ===");
+        System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // Create Deque to store characters
-        Deque<Character> deque = new LinkedList<>();
+        // Creating object of PalindromeChecker
+        PalindromeChecker checker = new PalindromeChecker();
 
-        // Insert characters into deque
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
-        }
+        boolean result = checker.checkPalindrome(input);
 
-        // Variable to track palindrome status
-        boolean isPalindrome = true;
-
-        // Compare front and rear characters until deque size <= 1
-        while (deque.size() > 1) {
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
-
-            if (front != rear) {
-                isPalindrome = false;
-                break;
-            }
-        }
-
-        // Print result
-        if (isPalindrome) {
-            System.out.println("The string \"" + input + "\" is a Palindrome.");
+        if (result) {
+            System.out.println("Result: The given string is a Palindrome.");
         } else {
-            System.out.println("The string \"" + input + "\" is NOT a Palindrome.");
+            System.out.println("Result: The given string is NOT a Palindrome.");
         }
 
-        // Close scanner
         scanner.close();
     }
 }
