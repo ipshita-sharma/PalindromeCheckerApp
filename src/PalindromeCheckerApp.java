@@ -1,49 +1,117 @@
-import java.util.Scanner;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
-public class PalindromeCheckerApp {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean check(String input);
+}
 
-    // Entry point of the Java application
-    public static void main(String[] args) {
 
-        // Create Scanner for user input
-        Scanner scanner = new Scanner(System.in);
+// Stack-Based Strategy
+class StackStrategy implements PalindromeStrategy {
 
-        // Ask user to enter a string
-        System.out.print("Enter a string to check palindrome: ");
-        String input = scanner.nextLine();
+    @Override
+    public boolean check(String input) {
 
-        // Create Deque to store characters
-        Deque<Character> deque = new LinkedList<>();
+        String processed = input.replaceAll("\\s+", "").toLowerCase();
 
-        // Insert characters into deque
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
+        Stack<Character> stack = new Stack<>();
+
+        for (char c : processed.toCharArray()) {
+            stack.push(c);
         }
 
-        // Variable to track palindrome status
-        boolean isPalindrome = true;
-
-        // Compare front and rear characters until deque size <= 1
-        while (deque.size() > 1) {
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
-
-            if (front != rear) {
-                isPalindrome = false;
-                break;
+        for (char c : processed.toCharArray()) {
+            if (c != stack.pop()) {
+                return false;
             }
         }
 
-        // Print result
-        if (isPalindrome) {
-            System.out.println("The string \"" + input + "\" is a Palindrome.");
-        } else {
-            System.out.println("The string \"" + input + "\" is NOT a Palindrome.");
+        return true;
+    }
+}
+
+
+// Deque-Based Strategy
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean check(String input) {
+
+        String processed = input.replaceAll("\\s+", "").toLowerCase();
+
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char c : processed.toCharArray()) {
+            deque.addLast(c);
         }
 
-        // Close scanner
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+
+// Context Class
+class PalindromeContext {
+
+    private PalindromeStrategy strategy;
+
+    public PalindromeContext(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean execute(String input) {
+        return strategy.check(input);
+    }
+}
+
+
+// Application Class
+public class PalindromeCheckerApp {
+
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("=== UC12: Strategy Pattern Palindrome Checker ===");
+        System.out.println("Choose Algorithm:");
+        System.out.println("1. Stack Strategy");
+        System.out.println("2. Deque Strategy");
+        System.out.print("Enter choice (1 or 2): ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+
+        PalindromeStrategy strategy;
+
+        if (choice == 1) {
+            strategy = new StackStrategy();
+        } else {
+            strategy = new DequeStrategy();
+        }
+
+        PalindromeContext context = new PalindromeContext(strategy);
+
+        boolean result = context.execute(input);
+
+        if (result) {
+            System.out.println("Result: The given string is a Palindrome.");
+        } else {
+            System.out.println("Result: The given string is NOT a Palindrome.");
+        }
+
         scanner.close();
     }
 }
